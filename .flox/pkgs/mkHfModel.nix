@@ -9,13 +9,18 @@
 # Usage (from per-model .nix files):
 #   { pkgs, mkHfModel ? pkgs.callPackage ./mkHfModel.nix {} }:
 #   mkHfModel { pname = "..."; version = "..."; srcPath = /path/to/snapshot; ... }
-{ runCommand }:
+{ stdenv }:
 { pname, version, srcPath, slug, snapshotId }:
 
-runCommand pname {} ''
-  _snap="$out/share/models/hub/models--${slug}/snapshots/${snapshotId}"
-  mkdir -p "$_snap"
-  cp -rL ${srcPath}/* "$_snap/"
-  mkdir -p "$out/share/models/hub/models--${slug}/refs"
-  echo -n "${snapshotId}" > "$out/share/models/hub/models--${slug}/refs/main"
-''
+stdenv.mkDerivation {
+  inherit pname version;
+  src = srcPath;
+  dontBuild = true;
+  installPhase = ''
+    _snap="$out/share/models/hub/models--${slug}/snapshots/${snapshotId}"
+    mkdir -p "$_snap"
+    cp -rL $src/* "$_snap/"
+    mkdir -p "$out/share/models/hub/models--${slug}/refs"
+    echo -n "${snapshotId}" > "$out/share/models/hub/models--${slug}/refs/main"
+  '';
+}
