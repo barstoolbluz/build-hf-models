@@ -9,6 +9,11 @@ mkHfModel {
   baseVersion = "1.0.0";
   inherit buildMeta;
   srcPath = /mnt/scratch/models/inferencing/hub/models--HuggingFaceTB--SmolLM3-3B-FP8-TORCHAO/snapshots/7e79e7b04e4b2f58d723291c3016f22b26ab177c;
-  slug = "HuggingFaceTB--SmolLM3-3B-FP8-TORCHAO";
-  snapshotId = "7e79e7b04e4b2f58d723291c3016f22b26ab177c";
+  tritonModelName = "smollm3_3b_fp8";
+  vllmDefaults = {
+    gpu_memory_utilization = 0.85;
+    max_model_len = 4096;
+    dtype = "auto";
+    enable_log_requests = false;
+  };
 }

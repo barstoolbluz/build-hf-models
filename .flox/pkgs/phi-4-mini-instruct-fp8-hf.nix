@@ -9,6 +9,11 @@ mkHfModel {
   baseVersion = "1.0.2";
   inherit buildMeta;
   srcPath = /mnt/scratch/models/inferencing/resolved/pytorch--Phi-4-mini-instruct-FP8;
-  slug = "pytorch--Phi-4-mini-instruct-FP8";
-  snapshotId = "794ed9e467db7b7f533b55c9f05e7693c7db34b4";
+  tritonModelName = "phi4_mini_instruct_fp8_hf";
+  vllmDefaults = {
+    gpu_memory_utilization = 0.85;
+    max_model_len = 4096;
+    dtype = "auto";
+    enable_log_requests = false;
+  };
 }

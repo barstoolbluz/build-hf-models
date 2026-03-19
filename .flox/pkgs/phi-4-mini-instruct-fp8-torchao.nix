@@ -9,6 +9,11 @@ mkHfModel {
   baseVersion = "1.0.0";
   inherit buildMeta;
   srcPath = /mnt/scratch/models/inferencing/hub/models--microsoft--Phi-4-mini-instruct-FP8-TORCHAO/snapshots/b63ecd840bb9835f35e6d884d47810c4deec89dc;
-  slug = "microsoft--Phi-4-mini-instruct-FP8-TORCHAO";
-  snapshotId = "b63ecd840bb9835f35e6d884d47810c4deec89dc";
+  tritonModelName = "phi4_mini_instruct_fp8";
+  vllmDefaults = {
+    gpu_memory_utilization = 0.85;
+    max_model_len = 4096;
+    dtype = "auto";
+    enable_log_requests = false;
+  };
 }
