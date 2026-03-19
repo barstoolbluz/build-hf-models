@@ -1,0 +1,7 @@
+{
+  "build_version": 1,
+  "force_increment": 0,
+  "git_rev": "d6c46be1850c216ef3f307919aba3186afe3fbd6",
+  "git_rev_short": "d6c46be",
+  "changelog": "Initial AWQ 4-bit quantization of Phi-3.5-mini-instruct for T4."
+}

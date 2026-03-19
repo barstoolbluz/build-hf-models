@@ -20,5 +20,6 @@ mkHfModel {
     max_model_len = 4096;
     dtype = "auto";
     enable_log_requests = false;
+    trust_remote_code = true;
   };
 }
