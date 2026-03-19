@@ -1,32 +1,24 @@
-# Qwen3.5-2B (unquantized, already under 5GB) for vLLM
+# Qwen3.5-2B (unquantized, fits on T4) — dual layout for Triton + vanilla vLLM
 #
-# HF cache snapshots use symlinks to ../../blobs/, so we need to pass the
-# entire model directory (including blobs/) and resolve symlinks during copy.
-{ pkgs }:
+# HF cache snapshots use symlinks to ../../blobs/, so srcPath must be the
+# entire model directory (including blobs/) and we resolve symlinks during copy.
+{ pkgs, mkHfModel ? pkgs.callPackage ./mkHfModel.nix {} }:
 
 let
   buildMeta = builtins.fromJSON (builtins.readFile ../../build-meta/vllm-qwen3-5-2b.json);
+in
+mkHfModel {
+  pname = "vllm-qwen3.5-2b";
   baseVersion = "1.0.0";
-  version = "${baseVersion}+${buildMeta.git_rev_short}";
-  modelRoot = /mnt/scratch/models/inferencing/hub/models--Qwen--Qwen3.5-2B;
+  inherit buildMeta;
+  srcPath = /mnt/scratch/models/inferencing/hub/models--Qwen--Qwen3.5-2B;
+  tritonModelName = "qwen3_5_2b";
   slug = "Qwen--Qwen3.5-2B";
   snapshotId = "15852e8c16360a2fea060d615a32b45270f8a8fc";
-  pname = "vllm-qwen3.5-2b";
-in
-pkgs.stdenv.mkDerivation {
-  inherit pname version;
-  src = modelRoot;
-  dontBuild = true;
-  installPhase = ''
-    _snap="$out/share/models/hub/models--${slug}/snapshots/${snapshotId}"
-    mkdir -p "$_snap"
-    # Follow symlinks (-L) to resolve blob references
-    cp -rL ${modelRoot}/snapshots/${snapshotId}/* "$_snap/"
-    # Remove non-essential files to save space
-    rm -f "$_snap/.gitattributes" "$_snap/README.md" "$_snap/LICENSE"
-    mkdir -p "$out/share/models/hub/models--${slug}/refs"
-    echo -n "${snapshotId}" > "$out/share/models/hub/models--${slug}/refs/main"
-    mkdir -p "$out/share/${pname}"
-    echo -n "${version}" > "$out/share/${pname}/flox-build-version-${toString buildMeta.build_version}"
-  '';
+  vllmDefaults = {
+    gpu_memory_utilization = 0.85;
+    max_model_len = 4096;
+    dtype = "auto";
+    enable_log_requests = false;
+  };
 }
