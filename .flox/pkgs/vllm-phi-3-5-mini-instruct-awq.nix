@@ -8,8 +8,8 @@ let
   buildMeta = builtins.fromJSON (builtins.readFile ../../build-meta/phi-3-5-mini-instruct-awq.json);
 in
 mkHfModel {
-  pname = "phi-3.5-mini-instruct-awq";
-  baseVersion = "1.0.0";
+  pname = "vllm-phi-3.5-mini-instruct-awq";
+  baseVersion = "1.0.1";
   inherit buildMeta;
   srcPath = /mnt/scratch/models/inferencing/hub/models--microsoft--Phi-3.5-mini-instruct-AWQ;
   tritonModelName = "phi3_5_mini_instruct_awq";
