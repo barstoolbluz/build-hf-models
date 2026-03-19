@@ -9,12 +9,15 @@
 { pkgs }:
 
 let
+  buildMeta = builtins.fromJSON (builtins.readFile ../../build-meta/phi-4-mini-instruct-fp8-sglang.json);
+  baseVersion = "1.0.0";
+  version = "${baseVersion}+${buildMeta.git_rev_short}";
   slug = "microsoft--Phi-4-mini-instruct-FP8-TORCHAO";
   snapshotId = "b63ecd840bb9835f35e6d884d47810c4deec89dc";
+  pname = "phi-4-mini-instruct-fp8-sglang";
 in
 pkgs.stdenv.mkDerivation {
-  pname = "phi-4-mini-instruct-fp8-sglang";
-  version = "1.0.0";
+  inherit pname version;
   src = /mnt/scratch/models/inferencing/hub/models--microsoft--Phi-4-mini-instruct-FP8-TORCHAO/snapshots/b63ecd840bb9835f35e6d884d47810c4deec89dc;
   nativeBuildInputs = [ pkgs.jq ];
   dontBuild = true;
@@ -31,5 +34,8 @@ pkgs.stdenv.mkDerivation {
       jq '.tokenizer_class = "PreTrainedTokenizerFast"' "$_tc" > "$_tc.tmp"
       mv "$_tc.tmp" "$_tc"
     fi
+
+    mkdir -p "$out/share/${pname}"
+    echo -n "${version}" > "$out/share/${pname}/flox-build-version-${toString buildMeta.build_version}"
   '';
 }

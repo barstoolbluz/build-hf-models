@@ -8,10 +8,13 @@
 #
 # Usage (from per-model .nix files):
 #   { pkgs, mkHfModel ? pkgs.callPackage ./mkHfModel.nix {} }:
-#   mkHfModel { pname = "..."; version = "..."; srcPath = /path/to/snapshot; ... }
+#   mkHfModel { pname = "..."; baseVersion = "..."; buildMeta = ...; srcPath = /path/to/snapshot; ... }
 { stdenv }:
-{ pname, version, srcPath, slug, snapshotId }:
+{ pname, baseVersion, buildMeta, srcPath, slug, snapshotId }:
 
+let
+  version = "${baseVersion}+${buildMeta.git_rev_short}";
+in
 stdenv.mkDerivation {
   inherit pname version;
   src = srcPath;
@@ -22,5 +25,7 @@ stdenv.mkDerivation {
     cp -rL $src/* "$_snap/"
     mkdir -p "$out/share/models/hub/models--${slug}/refs"
     echo -n "${snapshotId}" > "$out/share/models/hub/models--${slug}/refs/main"
+    mkdir -p "$out/share/${pname}"
+    echo -n "${version}" > "$out/share/${pname}/flox-build-version-${toString buildMeta.build_version}"
   '';
 }
