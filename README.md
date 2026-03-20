@@ -81,7 +81,7 @@ mkHfModel {
 
 ### Special case: `phi-4-mini-instruct-fp8-sglang`
 
-This package is a **custom derivation** that does not use `mkHfModel`. It produces only the HF cache layout (no Triton `config.pbtxt`) and patches `tokenizer_config.json` — replacing `"TokenizersBackend"` with `"PreTrainedTokenizerFast"` — for compatibility with SGLang < 0.5.10 (which ships `transformers < 4.58`). This package can be removed once SGLang updates its transformers dependency.
+This package is a **custom derivation** that does not use `mkHfModel`. It produces only the HF cache layout (no Triton `config.pbtxt`) and patches `tokenizer_config.json` — replacing `"TokenizersBackend"` with `"PreTrainedTokenizerFast"` — for compatibility with SGLang 0.5.x (which ships `transformers` 4.57.x, before `TokenizersBackend` was added in 4.58). This package can be removed once SGLang ships `transformers >= 4.58`.
 
 ## Build metadata versioning
 
