@@ -1,7 +1,7 @@
 {
-  "build_version": 1,
+  "build_version": 2,
   "force_increment": 0,
-  "git_rev": "ca88e1655077dab1a0e8bc3583d98bb2575be501",
-  "git_rev_short": "ca88e16",
-  "changelog": "Adopt build-meta versioning."
+  "git_rev": "d4e19de4d6442ee4bba438272db7080f38783945",
+  "git_rev_short": "d4e19de",
+  "changelog": "Version bump for republish."
 }
