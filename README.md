@@ -15,7 +15,7 @@ Before diving into the layouts, here are the HuggingFace and Triton terms used t
 - **Snapshot ID** — a commit hash from HuggingFace Hub that pins a specific version of the model weights. Think of it like a git commit SHA for model files.
 - **HF cache layout** — the directory structure that HuggingFace's `huggingface_hub` Python library creates when it downloads a model. It stores files under `hub/models--<slug>/snapshots/<hash>/`. Tools like vLLM and SGLang use this library internally, so they know how to find models in this layout.
 - **Triton model repository** — Triton Inference Server discovers models by scanning a directory for subdirectories that contain a `config.pbtxt` file. Each subdirectory is one servable model.
-- **`config.pbtxt`** — a Protobuf-text configuration file that tells Triton how to serve a model: which backend to use (vLLM in our case), input/output tensor shapes, and batching policy.
+- **`config.pbtxt`** — a Protobuf-text configuration file that tells Triton how to serve a model: which backend to use (vLLM in our case), input/output tensor shapes, and streaming configuration.
 - **`model-defaults.json`** — a custom file this repo creates alongside `config.pbtxt`. It holds vLLM engine parameters (GPU memory fraction, max sequence length, data type, etc.) that the runtime reads when launching the model.
 - **`$out`** — in Nix build expressions, `$out` is the output path in the Nix store (e.g. `/nix/store/abc123-vllm-qwen3.5-2b-1.0.0/`). Everything the build produces goes under this path.
 
